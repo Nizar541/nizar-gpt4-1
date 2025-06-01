@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chat GPT Simple</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #121212;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+  }
+  #chat {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    border-bottom: 1px solid #333;
+  }
+  .message {
+    margin: 10px 0;
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  .user {
+    background: #4a90e2;
+    align-self: flex-end;
+    color: white;
+  }
+  .bot {
+    background: #333;
+    align-self: flex-start;
+  }
+  #inputArea {
+    display: flex;
+    padding: 10px;
+  }
+  #inputMessage {
+    flex: 1;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+    margin-right: 10px;
+  }
+  #sendBtn {
+    padding: 10px 20px;
+    background: #4a90e2;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  #sendBtn:disabled {
+    background: #888;
+    cursor: not-allowed;
+  }
+</style>
+</head>
+<body>
+
+<div id="chat"></div>
+
+<div id="inputArea">
+  <input type="text" id="inputMessage" placeholder="Escribe tu mensaje..." />
+  <button id="sendBtn">Enviar</button>
+</div>
+
+<script>
+  const chat = document.getElementById('chat');
+  const inputMessage = document.getElementById('inputMessage');
+  const sendBtn = document.getElementById('sendBtn');
+
+  function addMessage(text, sender) {
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message', sender);
+    msgDiv.textContent = text;
+    chat.appendChild(msgDiv);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const message = inputMessage.value.trim();
+    if (!message) return;
+
+    addMessage(message, 'user');
+    inputMessage.value = '';
+    sendBtn.disabled = true;
+
+    // Aquí iría la llamada real a la API de OpenAI
+    // Por ahora, simulamos la respuesta con un delay
+    addMessage('Pensando...', 'bot');
+
+    setTimeout(() => {
+      chat.lastChild.textContent = 'Respuesta simulada: ' + message.split('').reverse().join('');
+      sendBtn.disabled = false;
+    }, 1500);
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  inputMessage.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') sendMessage();
+  });
+</script>
+
+</body>
+</html>
